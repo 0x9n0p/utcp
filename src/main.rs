@@ -4,7 +4,7 @@ use std::io;
 global_asm!(include_str!("queue.asm"));
 
 extern {
-    fn enqueue(frame: *const u8, n: u64);
+    fn on_rcvd_frame(frame: *const u8, n: u64);
 }
 
 fn main() -> io::Result<()> {
@@ -15,6 +15,6 @@ fn main() -> io::Result<()> {
         let n = device.recv(&mut buf[..])?;
         eprintln!("{} {:x?}", n, &buf[..n]);
 
-        unsafe { enqueue(&buf as *const u8, n as u64); }
+        unsafe { on_rcvd_frame(&buf as *const u8, n as u64); }
     }
 }
